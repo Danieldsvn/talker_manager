@@ -27,6 +27,22 @@ app.get('/talker', (_request, response) => {
   });  
 });
 
+app.get('/talker/:id', (request, response) => {
+  const { id } = request.params;
+  fs.readFile('talker.json', (_err, content) => {    
+    if (!content) return response.status(200).json([]);    
+     const stringContent = content.toString('utf-8');
+     if (stringContent.length > 0) {
+       const talkers = JSON.parse(stringContent);
+       const talkerSearched = talkers.find((talker) => talker.id === +id);       
+       if (talkerSearched === undefined) {
+        return response.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+       }
+       return response.status(200).json(talkerSearched);
+      }        
+ });  
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
