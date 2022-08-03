@@ -27,7 +27,7 @@ const passwordResponse = (response, password) => {
   }
 };
 
-const userValidation = (request, response, email, password) => {
+const userValidation = (response, email, password) => {
   emailResponse(response, email);
   passwordResponse(response, password);
 };
