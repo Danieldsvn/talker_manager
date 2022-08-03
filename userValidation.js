@@ -1,3 +1,5 @@
+const tokenGenerator = require('./token-generator');
+
 const ValidateEmail = (email) => {
  if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
     return (true);
@@ -5,7 +7,8 @@ const ValidateEmail = (email) => {
     return (false);
 };
 
-const emailResponse = (response, email) => {
+const emailResponse = (request, response) => {
+  const { email } = request.body;
   if (!email || email === '') {
     return response.status(400)
     .json({ message: 'O campo "email" é obrigatório' });
@@ -16,7 +19,8 @@ const emailResponse = (response, email) => {
   }
 };
 
-const passwordResponse = (response, password) => {
+const passwordResponse = (request, response) => {
+  const { password } = request.body;
   if (!password || password === '') {
     return response.status(400)
     .json({ message: 'O campo "password" é obrigatório' });
@@ -27,9 +31,12 @@ const passwordResponse = (response, password) => {
   }
 };
 
-const userValidation = (response, email, password) => {
-  emailResponse(response, email);
-  passwordResponse(response, password);  
+const userValidation = (request, response, next) => {
+  emailResponse(request, response);
+  passwordResponse(request, response);
+  const token = tokenGenerator();  
+  request.headers.authorization = token;  
+  next();  
 };
 
 module.exports = userValidation;
