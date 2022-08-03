@@ -50,17 +50,19 @@ app.post('/login', (request, response, next) => {
   users.push({ email, password });  
   console.log(users);
   const token = tokenGenerator();
-  request.headers = JSON.stringify(token);
+  request.headers.authorization = JSON.stringify(token);
   next();
   return response.status(200).json({ token });
 });
 
-// app.post('/talker', (request, response) => {
-//   const { name, age, talk: { watchedAt, rate } } = request.body;
-//   fs.writeFile('talker.json', (_err, content) => {
-
-//   });
-// });
+app.post('/talker', (request, response) => {
+  const { token } = request.headers.authorization;
+  if (!token) return response.status(401).json({ message: 'Token não encontrado' });
+  if (token.length !== 16) return response.status(401).json({ message: 'Token inválido' });
+  const { name, age, talk: { watchedAt, rate } } = request.body;
+  fs.writeFile('talker.json', 'teste de escrita')
+  .then(() => response.status(200));
+});
 
 app.listen(PORT, () => {
   console.log('Online');
