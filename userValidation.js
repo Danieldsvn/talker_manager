@@ -8,22 +8,22 @@ const ValidateEmail = (email) => {
 const emailResponse = (response, email) => {
   if (!email || email === '') {
     return response.status(400)
-    .json({ message: 'O campo \'email\' é obrigatório' });
+    .json({ message: 'O campo "email" é obrigatório' });
   } 
   if (!(ValidateEmail(email))) {
     return response.status(400)
-    .json({ message: 'O \'email\' deve ter o formato \'email@email.com\'' });
+    .json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
 };
 
 const passwordResponse = (response, password) => {
   if (!password || password === '') {
     return response.status(400)
-    .json({ message: 'O campo \'password\' é obrigatório' });
+    .json({ message: 'O campo "password" é obrigatório' });
   } 
   if (password.length < 6) {
     return response.status(400)
-    .json({ message: 'O \'password\' deve ter pelo menos 6 caracteres' });
+    .json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
 };
 

@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const tokenGenerator = require('./token-generator');
+const userValidation = require('./userValidation');
 
 const app = express();
 app.use(bodyParser.json());
@@ -46,7 +47,8 @@ app.get('/talker/:id', (request, response) => {
 });
 
 app.post('/login', (request, response) => {
-  const { email, password } = request.body;  
+  const { email, password } = request.body;
+  userValidation(response, email, password);  
   users.push({ email, password });  
   console.log(users);
   const token = tokenGenerator();
