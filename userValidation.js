@@ -29,7 +29,7 @@ const passwordResponse = (response, password) => {
 
 const userValidation = (response, email, password) => {
   emailResponse(response, email);
-  passwordResponse(response, password);
+  passwordResponse(response, password);  
 };
 
 module.exports = userValidation;

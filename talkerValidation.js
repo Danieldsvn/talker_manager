@@ -1,18 +1,13 @@
-// var date_regex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[1-9]|2[1-9])$/;
-//         var testDate = "03/17/21"
-//         if (date_regex.test(testDate)) {
-//             document.getElementById("message").innerHTML = "Date follows dd/mm/yy format";
-//         }
-//         else{
-//           document.getElementById("message").innerHTML = "Invalid date format";
-//         }
+const moment = require('moment');
 
-const TokenValidation = (token, response) => {
+const validateDate = (date) => moment(date, 'DD/MM/YYYY', true).isValid();
+
+const tokenValidator = (token, response) => {
   if (!token) return response.status(401).json({ message: 'Token não encontrado' });
   if (token.length !== 16) return response.status(401).json({ message: 'Token inválido' });
 };
 
-const NameValidation = (name, response) => {
+const nameValidator = (name, response) => {
   if (!name || name === '') {
     return response.status(400).json({ message: 'O campo "name" é obrigatório' });
   } 
@@ -21,7 +16,7 @@ const NameValidation = (name, response) => {
   } 
 };
 
-const AgeValidation = (age, response) => {
+const ageValidator = (age, response) => {
   if (!age || age === '' || age % 1 !== 0) {
     return response.status(400).json({ message: 'O campo "age" é obrigatório' });
   } 
@@ -30,15 +25,46 @@ const AgeValidation = (age, response) => {
   } 
 };
 
-const TalkValidation = (talk, watchedAt, rate) => {
-  if (!talk || talk === '') {
-    return response.status(400).json({ message: 'O campo "talk" é obrigatório' });
-  } 
+const watchedAtValidator = (watchedAt, response) => {
   if (!watchedAt || watchedAt === '') {
-    return response.status(400).json({ message: 'O campo "watchedAt" é obrigatório' });
+    return response.status(400)
+    .json({ message: 'O campo "watchedAt" é obrigatório' });
+  }
+  if (!(validateDate(watchedAt))) {
+    return response.status(400)
+    .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  }
+};
+
+const rateValidator = (rate, response) => {
+  if (!rate || rate === '') {
+    return response.status(400)
+    .json({ message: 'O campo "rate" é obrigatório' });
+  } 
+  if (rate < 1 || rate > 5) {
+    return response.status(400)
+    .json({ message: 'O campo "rate" deve ser um inteiro de à 5' });
   } 
 };
 
-const talkerRouteFullValidation = (token, name, age, talk, watchedAt, rate, response) => {
-  
+const talkValidator = (talk, watchedAt, rate, response) => {
+  if (!talk || talk === '') {
+    return response.status(400).json({ message: 'O campo "talk" é obrigatório' });
+  }
+  watchedAtValidator(watchedAt, response);
+  rateValidator(rate, response);  
+};
+
+// function talkerRouteFullValidation([token, name, age, talk, watchedAt, rate, response]) {  
+//   tokenValidation(token, response);
+//   nameValidation(name, response);
+//   ageValidation(age, response);
+//   talkValidation(talk, watchedAt, rate, response);
+// };
+
+module.exports = {
+  tokenValidator,
+  nameValidator,
+  ageValidator,
+  talkValidator,
 };
