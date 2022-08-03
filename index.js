@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs');
+const fs = require('fs/promises');
 const tokenGenerator = require('./token-generator');
 const userValidation = require('./userValidation');
 
@@ -18,25 +18,23 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', (_request, response) => {
   let talkers = [];
-   fs.readFile('talker.json', (_err, content) => {    
+   fs.readFile('talker.json', 'utf8')
+   .then((content) => {
      if (!content) return response.status(200).json([]);
-     if (content) {
-      const stringContent = content.toString('utf-8');
-      if (stringContent.length > 0) {
-        talkers = JSON.parse(stringContent);
-      }          
+     if (content && content.length > 0) {         
+        talkers = JSON.parse(content);
+        return response.status(200).json(talkers);                
      } 
-     return response.status(200).json(talkers);
-  });  
-});
+    });
+   });
 
 app.get('/talker/:id', (request, response) => {
   const { id } = request.params;
-  fs.readFile('talker.json', (_err, content) => {    
-    if (!content) return response.status(200).json([]);    
-     const stringContent = content.toString('utf-8');
-     if (stringContent.length > 0) {
-       const talkers = JSON.parse(stringContent);
+  fs.readFile('talker.json', 'utf-8')
+  .then((content) => {    
+    if (!content) return response.status(200).json([]);        
+     if (content.length > 0) {
+       const talkers = JSON.parse(content);
        const talkerSearched = talkers.find((talker) => talker.id === +id);       
        if (talkerSearched === undefined) {
         return response.status(404).json({ message: 'Pessoa palestrante não encontrada' });
@@ -46,14 +44,23 @@ app.get('/talker/:id', (request, response) => {
  });  
 });
 
-app.post('/login', (request, response) => {
+app.post('/login', (request, response, next) => {
   const { email, password } = request.body;
   userValidation(response, email, password);  
   users.push({ email, password });  
   console.log(users);
   const token = tokenGenerator();
+  request.headers = JSON.stringify(token);
+  next();
   return response.status(200).json({ token });
 });
+
+// app.post('/talker', (request, response) => {
+//   const { name, age, talk: { watchedAt, rate } } = request.body;
+//   fs.writeFile('talker.json', (_err, content) => {
+
+//   });
+// });
 
 app.listen(PORT, () => {
   console.log('Online');
