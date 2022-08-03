@@ -56,10 +56,9 @@ app.post('/login', (request, response, next) => {
 });
 
 app.post('/talker', (request, response) => {
-  const { token } = request.headers.authorization;
-  if (!token) return response.status(401).json({ message: 'Token não encontrado' });
-  if (token.length !== 16) return response.status(401).json({ message: 'Token inválido' });
-  const { name, age, talk: { watchedAt, rate } } = request.body;
+  const { token } = request.headers.authorization;  
+  const { name, age, talk } = request.body;
+  const { watchedAt, rate } = talk;
   fs.writeFile('talker.json', 'teste de escrita')
   .then(() => response.status(200));
 });
