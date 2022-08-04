@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
+const TALKERdotJSON = 'talker.json';
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -24,7 +25,7 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', (_request, response) => {
   let talkers = [];
-   fs.readFile('talker.json', 'utf8')
+   fs.readFile(TALKERdotJSON, 'utf8')
    .then((content) => {
      if (!content) return response.status(200).json([]);
      if (content && content.length > 0) {         
@@ -34,43 +35,58 @@ app.get('/talker', (_request, response) => {
     });
    });
 
-   app.get('/talker/:id', (request, response) => {
-     const { id } = request.params;
-     fs.readFile('talker.json', 'utf-8')
-     .then((content) => {    
-       if (!content) return response.status(200).json([]);        
-        if (content.length > 0) {
-          const talkers = JSON.parse(content);
-          const talkerSearched = talkers.find((talker) => talker.id === +id);       
-          if (talkerSearched === undefined) {
-           return response.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-          }
-          return response.status(200).json(talkerSearched);
-         }        
-    });  
-   });
-   
-   app.post('/login', emailValidator, passwordValidator, (request, response) => {   
-    const token = request.headers.authorization;        
-    return response.status(200).json({ token });
-  });
+app.get('/talker/:id', (request, response) => {
+  const { id } = request.params;
+  fs.readFile(TALKERdotJSON, 'utf-8')
+  .then((content) => {    
+    if (!content) return response.status(200).json([]);        
+    if (content.length > 0) {
+      const talkers = JSON.parse(content);
+      const talkerSearched = talkers.find((talker) => talker.id === +id);       
+      if (talkerSearched === undefined) {
+        return response.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+      }
+      return response.status(200).json(talkerSearched);
+      }        
+});  
+});
 
-   app.post('/talker', tokenValidator, nameValidator, ageValidator,
-    talkValidator, watchedAtValidator, rateValidator, (request, response) => { 
-    let newTalker = request.body;     
-    fs.readFile('talker.json', 'utf-8')
-    .then((content) => {
-      const contentParsed = JSON.parse(content);
-      newTalker = {        
-        id: contentParsed.length + 1,
-        ...newTalker,
-      };      
-      contentParsed.push(newTalker);
-      const newContent = JSON.stringify(contentParsed);      
-      fs.writeFile('talker.json', newContent)
-      .then(() => response.status(201).json(newTalker)); 
-    });
+app.post('/login', emailValidator, passwordValidator, (request, response) => {   
+  const token = request.headers.authorization;        
+  return response.status(200).json({ token });
+});
+
+app.post('/talker', tokenValidator, nameValidator, ageValidator,
+  talkValidator, watchedAtValidator, rateValidator, (request, response) => { 
+  let newTalker = request.body;     
+  fs.readFile(TALKERdotJSON, 'utf-8')
+  .then((content) => {
+    const contentParsed = JSON.parse(content);
+    newTalker = {        
+      id: contentParsed.length + 1,
+      ...newTalker,
+    };      
+    contentParsed.push(newTalker);
+    const newContent = JSON.stringify(contentParsed);      
+    fs.writeFile(TALKERdotJSON, newContent)
+    .then(() => response.status(201).json(newTalker)); 
   });
+});
+
+app.put('/talker/:id', tokenValidator, nameValidator, ageValidator,
+talkValidator, watchedAtValidator, rateValidator, (request, response) => {
+  const { id } = request.params;
+  let talkerBody = request.body;
+  talkerBody = { id: Number(id), ...talkerBody };
+  fs.readFile(TALKERdotJSON, 'utf-8')
+  .then((content) => {
+    const contentParsed = JSON.parse(content);
+    contentParsed.splice(id - 1, 1, talkerBody);
+    const contentStringfied = JSON.stringify(contentParsed);
+    fs.writeFile(TALKERdotJSON, contentStringfied)
+    .then(() => response.status(200).json(talkerBody));
+  });
+});
 
 app.listen(PORT, () => {
   console.log('Online');
