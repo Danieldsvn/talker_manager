@@ -53,8 +53,7 @@ const watchedAtValidator = (request, response, next) => {
 };
 
 const rateValidator = (request, response, next) => {
-  const { rate } = request.body.talk;
-  console.log(`rate: ${rate}, typeof rate: ${typeof rate}`);
+  const { rate } = request.body.talk;  
   if (rate < 1 || rate > 5) {
     return response.status(400)
     .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
