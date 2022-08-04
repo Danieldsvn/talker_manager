@@ -88,6 +88,20 @@ talkValidator, watchedAtValidator, rateValidator, (request, response) => {
   });
 });
 
+app.delete('/talker/:id', tokenValidator, (request, response) => {
+  const { id } = request.params;
+  fs.readFile(TALKERdotJSON, 'utf-8')
+  .then((content) => {
+    const contentParsed = JSON.parse(content);
+    const newContentParsed = contentParsed.filter((talker) => talker.id !== +id);
+    const newContentStringfied = JSON.stringify(newContentParsed, null, 2);    
+    if (newContentStringfied !== content) {
+      fs.writeFile(TALKERdotJSON, newContentStringfied)
+      .then(() => response.status(204).end());
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
