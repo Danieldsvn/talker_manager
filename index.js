@@ -35,6 +35,19 @@ app.get('/talker', (_request, response) => {
     });
    });
 
+   app.get('/talker/search', tokenValidator, (request, response) => {
+    const search = request.query.q;  
+    fs.readFile(TALKERdotJSON, 'utf-8')
+    .then((content) => {
+        const contentParsed = JSON.parse(content);        
+        if (!search || search === '') return response.status(200).json(contentParsed);
+        const searchResult = contentParsed.filter((talker) => (
+           talker.name.toLowerCase().includes(search.toLowerCase()) 
+        ));
+        return response.status(200).json(searchResult); 
+      });
+  });
+
 app.get('/talker/:id', (request, response) => {
   const { id } = request.params;
   fs.readFile(TALKERdotJSON, 'utf-8')
