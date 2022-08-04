@@ -51,11 +51,17 @@ app.get('/talker', (_request, response) => {
    app.post('/talker', talkerRouteFullValidation, (request, response) => { 
     console.log('SOU A LINHA 52 DE index.js');    
     const newTalker = request.body;
-    console.log(newTalker);
-    const stringifiedTalker = JSON.stringify(newTalker);
-    console.log(stringifiedTalker);
-    fs.appendFile('talker.json', stringifiedTalker)
-    .then(() => response.status(201).json(stringifiedTalker));
+    console.log(newTalker);    
+    fs.readFile('talker.json', 'utf-8')
+    .then((content) => {
+      const contentParsed = JSON.parse(content);
+      console.log(`contentParsed: ${contentParsed}`);
+      contentParsed.push(newTalker);
+      const newContent = JSON.stringify(contentParsed);
+      console.log(`newContent: ${newContent}`);
+      fs.writeFile('talker.json', newContent)
+      .then(() => response.status(201).json(newTalker)); 
+    });
   });
 
 app.listen(PORT, () => {
