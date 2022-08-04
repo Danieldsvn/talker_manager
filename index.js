@@ -2,7 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs/promises');
 const { emailValidator, passwordValidator } = require('./userValidation');
-const talkerRouteFullValidation = require('./talkerValidation');
+const {
+  tokenValidator,
+  nameValidator,
+  ageValidator,
+  talkValidator,
+  watchedAtValidator,
+  rateValidator,
+} = require('./talkerValidation');
 
 const app = express();
 app.use(bodyParser.json());
@@ -48,7 +55,8 @@ app.get('/talker', (_request, response) => {
     return response.status(200).json({ token });
   });
 
-   app.post('/talker', talkerRouteFullValidation, (request, response) => { 
+   app.post('/talker', tokenValidator, nameValidator, ageValidator,
+    talkValidator, watchedAtValidator, rateValidator, (request, response) => { 
     console.log('SOU A LINHA 52 DE index.js');    
     const newTalker = request.body;
     console.log(newTalker);    
