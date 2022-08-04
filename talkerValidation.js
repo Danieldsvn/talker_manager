@@ -2,8 +2,8 @@ const moment = require('moment');
 
 const validateDate = (date) => moment(date, 'DD/MM/YYYY', true).isValid();
 
-const tokenValidator = (request, response, next) => {
-  const { token } = request.headers.authorization;
+const tokenValidator = (request, response, next) => {  
+  const token = request.headers.authorization;
   if (!token) return response.status(401).json({ message: 'Token não encontrado' });
   if (token.length !== 16) return response.status(401).json({ message: 'Token inválido' });
   next();
@@ -60,19 +60,10 @@ const rateValidator = (request, response, next) => {
   } 
   if (+rate < 1 || +rate > 5) {
     return response.status(400)
-    .json({ message: 'O campo "rate" deve ser um inteiro de à 5' });
+    .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
   next(); 
 };
-
-// function talkerRouteFullValidation(request, response, next) {  
-//   tokenValidator(request, response);
-//   nameValidator(request, response);
-//   ageValidator(request, response);
-//   talkValidator(request, response);  
-//   console.log('SOU A LINHA 69 DE talkerValition.js'); 
-//   next();
-// }
 
 module.exports = {
   tokenValidator,

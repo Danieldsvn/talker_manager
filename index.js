@@ -57,16 +57,16 @@ app.get('/talker', (_request, response) => {
 
    app.post('/talker', tokenValidator, nameValidator, ageValidator,
     talkValidator, watchedAtValidator, rateValidator, (request, response) => { 
-    console.log('SOU A LINHA 52 DE index.js');    
-    const newTalker = request.body;
-    console.log(newTalker);    
+    let newTalker = request.body;     
     fs.readFile('talker.json', 'utf-8')
     .then((content) => {
       const contentParsed = JSON.parse(content);
-      console.log(`contentParsed: ${contentParsed}`);
+      newTalker = {        
+        id: contentParsed.length + 1,
+        ...newTalker,
+      };      
       contentParsed.push(newTalker);
-      const newContent = JSON.stringify(contentParsed);
-      console.log(`newContent: ${newContent}`);
+      const newContent = JSON.stringify(contentParsed);      
       fs.writeFile('talker.json', newContent)
       .then(() => response.status(201).json(newTalker)); 
     });
