@@ -7,7 +7,7 @@ const ValidateEmail = (email) => {
     return (false);
 };
 
-const emailResponse = (request, response) => {
+const emailValidator = (request, response, next) => {
   const { email } = request.body;
   if (!email || email === '') {
     return response.status(400)
@@ -17,9 +17,10 @@ const emailResponse = (request, response) => {
     return response.status(400)
     .json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
+  next();
 };
 
-const passwordResponse = (request, response) => {
+const passwordValidator = (request, response, next) => {
   const { password } = request.body;
   if (!password || password === '') {
     return response.status(400)
@@ -29,14 +30,17 @@ const passwordResponse = (request, response) => {
     return response.status(400)
     .json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
-};
-
-const userValidation = (request, response, next) => {
-  emailResponse(request, response);
-  passwordResponse(request, response);
   const token = tokenGenerator();  
   request.headers.authorization = token;  
-  next();  
+  next();
 };
 
-module.exports = userValidation;
+// const userValidation = (request, response, next) => {
+//   emailValidator(request, response);
+//   passwordValidator(request, response);
+//   const token = tokenGenerator();  
+//   request.headers.authorization = token;  
+//   next();  
+// };
+
+module.exports = { emailValidator, passwordValidator };

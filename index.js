@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs/promises');
-const userValidation = require('./userValidation');
+const { emailValidator, passwordValidator } = require('./userValidation');
 const talkerRouteFullValidation = require('./talkerValidation');
 
 const app = express();
@@ -43,7 +43,7 @@ app.get('/talker', (_request, response) => {
     });  
    });
    
-   app.post('/login', userValidation, (request, response) => {   
+   app.post('/login', emailValidator, passwordValidator, (request, response) => {   
     const token = request.headers.authorization;        
     return response.status(200).json({ token });
   });
