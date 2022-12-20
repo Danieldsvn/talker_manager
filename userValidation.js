@@ -35,12 +35,4 @@ const passwordValidator = (request, response, next) => {
   next();
 };
 
-// const userValidation = (request, response, next) => {
-//   emailValidator(request, response);
-//   passwordValidator(request, response);
-//   const token = tokenGenerator();  
-//   request.headers.authorization = token;  
-//   next();  
-// };
-
 module.exports = { emailValidator, passwordValidator };

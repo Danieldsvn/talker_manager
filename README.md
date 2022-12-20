@@ -3,7 +3,7 @@
 
 ## Tecnologias empregadas:
 
-Node.js
+Node.js e biblioteca crypto para gerar token.
 
 ## Habilidades praticadas
 
