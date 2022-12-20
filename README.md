@@ -1,13 +1,24 @@
-# :construction: README customizado em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto no qual você pode customizar e reutilizar todas as vezes que for executar o trybe-publisher.
 
-Para deixá-lo com a sua cara, basta alterar o seguinte arquivo da sua máquina: ~/.student-repo-publisher/custom/_NEW_README.md
+22º projeto na Trybe. Uma aplicação Node.Js de cadastro de talkers (palestrantes) em que é possível possível cadastrar, visualizar, pesquisar, editar e excluir informações.  
 
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+## Tecnologias empregadas:
+
+Node.js
+
+## Habilidades praticadas
+
+  * Desenvolvimento de uma API de um `CRUD` (**C**reate, **R**ead, **U**pdate e **D**elete);
+
+  * Desenvolvimento de endpoints que leem e escrevem em um arquivo utilizando o módulo `fs`.
+
+
+## O que é de minha autoria:
+
+Os arquivos:
+
+* `./index.js`
+* `./talkerValidation.js`
+* `./token-generator.js`
+* `./userValidation.js`
+
+
