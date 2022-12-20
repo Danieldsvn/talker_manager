@@ -3,13 +3,13 @@
 
 ## Tecnologias empregadas:
 
-Node.js e biblioteca crypto para gerar token.
+Node.js e as biblioteca `crypto` (para gerar token) e `express` (para criar rotas).
 
 ## Habilidades praticadas
 
   * Desenvolvimento de uma API de um `CRUD` (**C**reate, **R**ead, **U**pdate e **D**elete);
 
-  * Desenvolvimento de endpoints que leem e escrevem em um arquivo utilizando o módulo `fs`.
+  * Desenvolvimento de endpoints com `Express` que leem e escrevem em um arquivo utilizando o módulo `fs`.
 
 
 ## O que é de minha autoria:
