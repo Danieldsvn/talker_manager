@@ -1,7 +1,7 @@
 
 # Talker Manager
 
-22º projeto na Trybe. Uma aplicação Node.Js de cadastro de talkers (palestrantes) em que é possível possível cadastrar, visualizar, pesquisar, editar e excluir informações.  
+21º projeto na Trybe. Uma aplicação Node.Js de cadastro de talkers (palestrantes) em que é possível possível cadastrar, visualizar, pesquisar, editar e excluir informações.  
 
 ## Tecnologias empregadas:
 
